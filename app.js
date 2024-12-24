@@ -1,5 +1,7 @@
 import express from "express";
 import router from "./routes/index.routes.js";
+import { configDotenv } from "dotenv";
+configDotenv(); //ennvironment varaibles
 
 const app = express();
 //essential middleware
