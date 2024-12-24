@@ -1,0 +1,21 @@
+{
+  "name": "exapnse-tracker",
+  "version": "1.0.0",
+  "description": "expanse tracker task",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "null",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "mohamed hisham",
+  "license": "ISC",
+  "dependencies": {
+    "argon2": "^0.41.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.2"
+  }
+}
