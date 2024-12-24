@@ -1,7 +1,7 @@
-import { sign, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export const createJWT = (user) => {
-	const token = sign(
+	const token = jwt.sign(
 		{ id: user.id, email: user.email },
 		process.env.JWT_SECRET,
 		{ expiresIn: "15m" }
@@ -22,7 +22,7 @@ const protect = (req, res, next) => {
 	}
 
 	try {
-		const payload = verify(token, process.env.JWT_SECRET);
+		const payload = jwt.verify(token, process.env.JWT_SECRET);
 		req.user = payload;
 		return next();
 	} catch (e) {

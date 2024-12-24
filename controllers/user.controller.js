@@ -1,7 +1,7 @@
 import { hash, argon2id } from "argon2";
 import isValidEmail from "../helpers/emailValidation.js";
 import errorHandler from "../helpers/errorHandler.js";
-import USER from "../models/user.model";
+import USER from "../models/user.model.js";
 
 export const getUsers = async (req, res, next) => {
 	const filters = req.query;
@@ -39,8 +39,15 @@ export const createUsers = async (req, res, next) => {
 		);
 	}
 	try {
+		//check if the user already exist
+		const isAlreadyExist = await USER.findOne({email})
+		if(isAlreadyExist != undefined){
+			return next(
+				errorHandler(400, "duplicate value", "bad request", "Error")
+			);
+		}
 		//hash password before saving
-		const hashedPassword = hash(password, {
+		const hashedPassword = await hash(password, {
 			type: argon2id, // Use Argon2id for best resistance against attacks
 			timeCost: 3, // Number of iterations
 			memoryCost: 65536, // 64 MB memory

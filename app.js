@@ -12,12 +12,13 @@ app.use("/api", router);
 
 //error handler route
 app.use("/", function errorRoute(err, req, res, next) {
-	return res.status(err.statusCode).json({
+	const { statusCode, name, message, cause } = err;
+	return res.status(statusCode).json({
 		message: "ran into some error",
 		error: {
-			name: err.name,
-			message: err.message,
-			cause: err.cause,
+			name: name,
+			message: message,
+			cause: cause,
 		},
 	});
 });
