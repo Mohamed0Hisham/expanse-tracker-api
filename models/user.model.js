@@ -19,9 +19,6 @@ const userSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
-		expanses: {
-			type: [],
-		},
 	},
 	{ timestamps: true }
 );
