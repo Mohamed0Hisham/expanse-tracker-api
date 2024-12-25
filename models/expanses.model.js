@@ -2,7 +2,7 @@ import { Schema, Types, model } from "mongoose";
 
 const expansesSchema = new Schema(
 	{
-		user: { type: Types.ObjectId, ref: "user" },
+		user: { type: Schema.Types.ObjectId, ref: "user" },
 		title: String,
 		content: String,
 	},

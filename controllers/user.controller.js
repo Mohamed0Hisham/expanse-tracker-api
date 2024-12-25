@@ -6,7 +6,12 @@ import USER from "../models/user.model.js";
 export const getUsers = async (req, res, next) => {
 	const filters = req.query;
 	try {
-		const users = await USER.find(filters);
+		const users = await USER.find(filters, {
+			password: 0,
+			createdAt: 0,
+			updatedAt: 0,
+			__v: 0,
+		}).lean();
 		return res.status(200).json({ message: "users fetched", users });
 	} catch (error) {
 		return next(errorHandler(404, error.message, error.cause, error.name));
@@ -20,7 +25,12 @@ export const getUserByID = async (req, res, next) => {
 		);
 	}
 	try {
-		const user = await USER.findById(id);
+		const user = await USER.findById(id, {
+			password: 0,
+			createdAt: 0,
+			updatedAt: 0,
+			__v: 0,
+		}).lean();
 		return res.status(200).json({ message: "user fetched", user });
 	} catch (error) {
 		return next(errorHandler(404, error.message, error.cause, error.name));
@@ -40,8 +50,8 @@ export const createUsers = async (req, res, next) => {
 	}
 	try {
 		//check if the user already exist
-		const isAlreadyExist = await USER.findOne({email})
-		if(isAlreadyExist != undefined){
+		const isAlreadyExist = await USER.findOne({ email }, { password: 0 });
+		if (isAlreadyExist != undefined) {
 			return next(
 				errorHandler(400, "duplicate value", "bad request", "Error")
 			);
@@ -60,36 +70,38 @@ export const createUsers = async (req, res, next) => {
 		};
 		// it's time to save the user to the database
 		const user = await USER.create(newUser);
+		const { password: _, ...rest } = user._doc;
 		return res.status(201).json({
 			message: "user created successfully",
-			user,
+			user: rest,
 		});
 	} catch (error) {
 		return next(errorHandler(404, error.message, error.cause, error.name));
 	}
 };
 export const updateUser = async (req, res, next) => {
-	if (!req.body) {
+	const body = req.body;
+	if (body == undefined || Object.keys(body).length === 0) {
 		return next(
 			errorHandler(400, "missing credentials", "bad request", "Error")
 		);
 	}
-	if (req.body.password) {
+	if (body.password) {
 		return next(
 			errorHandler(401, "invalid update field", "bad request", "Error")
 		);
 	}
-	if (req.body.email) {
-		if (!isValidEmail(req.body.email)) {
+	if (body.email) {
+		if (!isValidEmail(body.email)) {
 			return next(
 				errorHandler(400, "missing credentials", "bad request", "Error")
 			);
 		}
 	}
 	try {
-		const updatedUser = await USER.findByIdAndUpdate(req.params.id, {
+		const updatedUser = await USER.findByIdAndUpdate(req.params.id, body, {
 			new: true,
-		});
+		}).select("-password");
 		return res.status(200).json({
 			message: "user updated",
 			new: updatedUser,
@@ -100,6 +112,8 @@ export const updateUser = async (req, res, next) => {
 };
 export const deleteUser = async (req, res, next) => {
 	USER.findByIdAndDelete(req.params.id)
+		.select("-password")
+		.lean()
 		.then((result) => {
 			return res.status(200).json({
 				message: "user deleted",

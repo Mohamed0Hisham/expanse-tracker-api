@@ -11,6 +11,7 @@ import {
 	addExpanse,
 	deleteExpanses,
 	getExpanses,
+	getUserExpanses,
 	modifyExpanse,
 } from "../controllers/expanse.controller.js";
 
@@ -28,6 +29,7 @@ router.route("/user/:id").delete(deleteUser);
 
 //expanses route
 router.route("/expanses/").get(getExpanses);
+router.route("/expanses/:id").get(getUserExpanses);
 router.route("/expanse").post(addExpanse);
 router.route("/expanse/:id").put(modifyExpanse);
 router.route("/expanse/:id").delete(deleteExpanses);
