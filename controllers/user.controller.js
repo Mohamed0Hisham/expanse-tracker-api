@@ -37,7 +37,12 @@ export const getUserByID = async (req, res, next) => {
 	}
 };
 export const createUsers = async (req, res, next) => {
-	const { name, email, password } = req?.body;
+	if (req.body == undefined || Object.keys(req.body).length === 0) {
+		return next(
+			errorHandler(400, "missing credentials", "bad request", "Error")
+		);
+	}
+	const { name, email, password } = req.body;
 	if (name == undefined || password == undefined || email == undefined) {
 		return next(
 			errorHandler(400, "missing credentials", "bad request", "Error")

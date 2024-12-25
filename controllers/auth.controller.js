@@ -5,7 +5,12 @@ import USER from "../models/user.model.js";
 import { createJWT } from "../middlewares/authentication.js";
 //authentication controller
 export const signUserIn = async (req, res, next) => {
-	const { email, password } = req?.body;
+	if (req.body == undefined || Object.keys(req.body).length === 0) {
+			return next(
+				errorHandler(400, "missing credentials", "bad request", "Error")
+			);
+		}
+	const { email, password } = req.body;
 	if (email == null || password == null) {
 		return next(
 			errorHandler(

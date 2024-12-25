@@ -12,6 +12,7 @@
   "author": "mohamed hisham",
   "license": "ISC",
   "dependencies": {
+    "@blackfireio/node-tracing": "^1.1.6",
     "argon2": "^0.41.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
