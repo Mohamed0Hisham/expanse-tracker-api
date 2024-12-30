@@ -3,13 +3,14 @@ import isValidEmail from "../helpers/emailValidation.js";
 import errorHandler from "../helpers/errorHandler.js";
 import USER from "../models/user.model.js";
 import { createJWT } from "../middlewares/authentication.js";
+import { argon2id } from "argon2";
 //authentication controller
 export const signUserIn = async (req, res, next) => {
 	if (req.body == undefined || Object.keys(req.body).length === 0) {
-			return next(
-				errorHandler(400, "missing credentials", "bad request", "Error")
-			);
-		}
+		return next(
+			errorHandler(400, "missing credentials", "bad request", "Error")
+		);
+	}
 	const { email, password } = req.body;
 	if (email == null || password == null) {
 		return next(
@@ -42,12 +43,12 @@ export const signUserIn = async (req, res, next) => {
 		}
 		//password verification using argon2
 		const isValidPassword = verify(user.password, password);
-		if (isValidPassword) {
+		if (!isValidPassword) {
 			return next(
 				errorHandler(
 					401,
 					"missing user credentials",
-					"invalid credentials",
+					"invalid password",
 					"Error"
 				)
 			);

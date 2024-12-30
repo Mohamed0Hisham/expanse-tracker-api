@@ -6,7 +6,6 @@ configDotenv(); //ennvironment varaibles
 const app = express();
 //essential middleware
 app.use(express.json());
-
 //my application routes
 app.use("/api", router);
 

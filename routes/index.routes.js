@@ -14,11 +14,12 @@ import {
 	getUserExpanses,
 	modifyExpanse,
 } from "../controllers/expanse.controller.js";
+import protect from "../middlewares/authentication.js";
 
 const router = Router();
 
 // authentication route
-router.route("/signin", signUserIn);
+router.route("/signin").post(signUserIn);
 
 //user routes
 router.route("/users/").get(getUsers);
@@ -26,11 +27,10 @@ router.route("/user/:id").get(getUserByID);
 router.route("/user").post(createUsers);
 router.route("/user/:id").put(updateUser);
 router.route("/user/:id").delete(deleteUser);
-
 //expanses route
 router.route("/expanses/").get(getExpanses);
-router.route("/expanses/:id").get(getUserExpanses);
-router.route("/expanse").post(addExpanse);
-router.route("/expanse/:id").put(modifyExpanse);
-router.route("/expanse/:id").delete(deleteExpanses);
+router.route("/expanses/:id").get(protect, getUserExpanses);
+router.route("/expanse").post(protect,addExpanse);
+router.route("/expanse/:id").put(protect, modifyExpanse);
+router.route("/expanse/:id").delete(protect,deleteExpanses);
 export default router;
