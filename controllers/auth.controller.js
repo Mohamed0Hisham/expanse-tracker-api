@@ -3,7 +3,6 @@ import isValidEmail from "../helpers/emailValidation.js";
 import errorHandler from "../helpers/errorHandler.js";
 import USER from "../models/user.model.js";
 import { createJWT } from "../middlewares/authentication.js";
-import { argon2id } from "argon2";
 //authentication controller
 export const signUserIn = async (req, res, next) => {
 	if (req.body == undefined || Object.keys(req.body).length === 0) {
